@@ -90,7 +90,7 @@ func (plugin *ImgAuthZPlugin) AuthZReq(req authorization.Request) authorization.
 	// Docker command do not involve registries
 	if isImageCommand == false {
 		// Allowed by default!
-		log.Println("[ALLOWED] Not a image command:", req.RequestMethod, reqURL.String())
+		log.Println("[ALLOWED] Not image or container creation command:", req.RequestMethod, reqURL.String())
 		return authorization.Response{Allow: true}
 	}
 
@@ -107,14 +107,6 @@ func (plugin *ImgAuthZPlugin) AuthZReq(req authorization.Request) authorization.
 		return authorization.Response{Allow: true}
 	}
 	log.Println("Enforcing DCT on", requestedImage, ". Request:", req.RequestMethod, reqURL.String())
-	imageTag := strings.Split(requestedImage, ":")
-	image := imageTag[0]
-	var tag string
-	if len(imageTag) > 1 {
-		tag = imageTag[1]
-	} else {
-		tag = "latest"
-	}
 	cmd := exec.Command("docker", "image", "pull", requestedImage)
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "DOCKER_CONTENT_TRUST=1")
@@ -122,11 +114,11 @@ func (plugin *ImgAuthZPlugin) AuthZReq(req authorization.Request) authorization.
 	imgProcessing[requestedImage] = true
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Println("[DENIED]", image+":"+tag, ". Reason:", string(out))
+		log.Println("[DENIED]", requestedImage, ". Reason:", string(out))
 		delete(imgProcessing, requestedImage)
 		return authorization.Response{Allow: false, Msg: string(out)}
 	}
-	log.Println("[ALLOWED]", image+":"+tag)
+	log.Println("[ALLOWED]", requestedImage)
 	delete(imgProcessing, requestedImage)
 	return authorization.Response{Allow: true}
 }
