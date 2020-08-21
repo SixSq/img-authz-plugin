@@ -1,0 +1,8 @@
+{
+  "description": "Authorization plugin for Docker. Enforces trust on pulled images and constrains registry access",
+  "entrypoint": ["/usr/libexec/img-authz-plugin"],
+  "interface" : {
+    "types": ["docker.authz/1.0"],
+    "socket": "img-authz-plugin.sock"
+  }
+}
