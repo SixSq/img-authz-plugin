@@ -1,6 +1,7 @@
 PLUGIN_NAME = sixsq/img-authz-plugin
 PLUGIN_TAG ?= latest
 BUILD_DIR = PLUGIN
+REGISTRIES :=
 
 all: clean rootfs create push
 
@@ -23,6 +24,7 @@ rootfs:
 	@docker export rootfs | tar -x -C ./${BUILD_DIR}/rootfs
 	@echo " - Copying config.json to ./${BUILD_DIR}"
 	@cp config.json ./${BUILD_DIR}/
+	@echo " - Deleting build container rootfs"
 	@docker rm -vf rootfs
 
 create:
@@ -31,7 +33,9 @@ create:
 	@echo " - Creating new plugin ${PLUGIN_NAME}:${PLUGIN_TAG} from ./${BUILD_DIR}"
 	@docker plugin create ${PLUGIN_NAME}:${PLUGIN_TAG} ./${BUILD_DIR}
 
-enable:		
+enable:
+	@echo " - Setting authz registries if any. Current value: ${REGISTRIES}"
+	@if [ ! -z ${REGISTRIES} ]; then docker plugin set ${PLUGIN_NAME}:${PLUGIN_TAG} REGISTRIES=${REGISTRIES}; fi
 	@echo " - Enabling the plugin ${PLUGIN_NAME}:${PLUGIN_TAG} locally"
 	@docker plugin enable ${PLUGIN_NAME}:${PLUGIN_TAG}
 
