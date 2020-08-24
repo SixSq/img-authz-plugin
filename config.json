@@ -4,5 +4,15 @@
   "interface" : {
     "types": ["docker.authz/1.0"],
     "socket": "img-authz-plugin.sock"
-  }
+  },
+  "env": [
+    {
+      "name": "REGISTRIES",
+      "description": "Comma-separated list of registries to be authorized",
+      "settable": [
+        "value"
+      ],
+      "value": ""
+    }
+  ]
 }
