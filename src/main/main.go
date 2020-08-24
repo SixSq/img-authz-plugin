@@ -6,8 +6,10 @@ package main
 import (
 	"flag"
 	"log"
+	"os"
 	"os/user"
 	"strconv"
+	"strings"
 
 	"github.com/docker/go-plugins-helpers/authorization"
 )
@@ -29,13 +31,12 @@ func main() {
 
 	log.Println("Plugin Version:", Version, "Build: ", Build)
 
-	// Fetch the registry cmd line options
-	flag.Var(&authorizedRegistries, "registry", "Specifies the authorized image registries")
-	flag.Parse()
+	// Fetch the registry from env
+	authorizedRegistries := os.Getenv("REGISTRIES")
 
 	// Convert authorized registries into a map for efficient lookup
 	registries := make(map[string]bool)
-	for _, registry := range authorizedRegistries {
+	for _, registry := range strings.Split(authorizedRegistries, ",") {
 		log.Println("Authorized registry:", registry)
 		registries[registry] = true
 	}
