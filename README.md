@@ -6,7 +6,7 @@ additional information, please refer to [docker
 documentation](https://docs.docker.com/engine/extend/) on plugins.
 
 
-## Build the plugin
+## Build and package the plugin
 
 Clean leftovers from previous builds:
 
@@ -44,7 +44,9 @@ To install the plugin from this repo:
 
 To get and install the plugin, simply run:
 
-`docker plugin install sixsq/img-authz-plugin:latest`
+`docker plugin install sixsq/img-authz-plugin:latest REGISTRIES=<authz_registry1,registry2...>`
+
+Where `REGISTRIES` is a comma-separated string with the list of registries to be authrized.
 
 
 
