@@ -5,11 +5,11 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/user"
 	"strconv"
-	"strings"
 
 	"github.com/docker/go-plugins-helpers/authorization"
 )
