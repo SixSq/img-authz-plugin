@@ -31,7 +31,7 @@ func main() {
 	log.Println("Plugin Version:", Version, "Build: ", Build)
 
 	// Fetch the registry from env
-	authorizedRegistries := os.Getenv("REGISTRY")
+	authorizedRegistry := os.Getenv("REGISTRY")
 
 	// Fetch the notary from env
 	authorizedNotary := os.Getenv("NOTARY")
@@ -45,22 +45,22 @@ func main() {
 
 	f, err := os.Create(notaryRootCAFile)
 	errt := f.Truncate(0)
-  if (err != nil || errt != nil)  {
-    log.Fatal(err, errt)
-  }
+	if err != nil || errt != nil {
+		log.Fatal(err, errt)
+	}
 
-  defer f.Close()
+	defer f.Close()
 	_, err2 := f.WriteString(notaryRootCA)
 	if err2 != nil {
-    log.Fatal(err2)
-  }
+		log.Fatal(err2)
+	}
 
 	// Convert authorized registries into a map for efficient lookup
+	// NB! Although, only single registry is expected at the moment,
+	//     wee keep registries map for the later extensibility.
 	registries := make(map[string]bool)
-	log.Println("Authorized registry:", authorizedRegistries)
-	registries[authorizedRegistries] = true
-
-	log.Println("No. of authorized registries: ", len(registries))
+	log.Println("Authorized registry:", authorizedRegistry)
+	registries[authorizedRegistry] = true
 
 	log.Println("Authorized notary: ", authorizedNotary)
 
