@@ -32,9 +32,10 @@ Publish the plugin to the registry:
 
 To install the plugin from this repo:
 
-`make local_install REGISTRIES=<authz_registry1,registry2...>`
+`make local_install REGISTRY=<registry>`
 
-(if you've already run `make build` and `make create`, then you can simply run `make enable REGISTRIES=<authz_registry1,registry2...>`).
+(if you've already run `make build` and `make create`, then you can simply run
+`make enable REGISTRY=<registry>`).
 
 Add the following JSON key value to `/etc/docker/daemon.json`:
 
@@ -50,9 +51,9 @@ and run `kill -SIGHUP $(pidof dockerd)`
 
 To get and install the plugin, simply run:
 
-`docker plugin install sixsq/img-authz-plugin:latest REGISTRIES=<authz_registry1,registry2...>`
+`docker plugin install sixsq/img-authz-plugin:latest REGISTRY=<registry>`
 
-Where `REGISTRIES` is a comma-separated string with the list of registries to be authrized.
+Where `REGISTRY` is host[:port] of the registry to be authorized.
 
 Add the following JSON key value to `/etc/docker/daemon.json`:
 
@@ -71,7 +72,7 @@ First disable the plugin:
 
 Then set the new registries value:
 
-`docker plugin set sixsq/img-authz-plugin:latest REGISTRIES=<authz_registry1,registry2...>`
+`docker plugin set sixsq/img-authz-plugin:latest REGISTRY=<registry>`
 
 Re-enable the plugin, and reload the Docker daemon:
 
